@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ plaka }} - Profil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #2e7d32;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      color: #333;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .contact-icons {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .contact-icons a {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+    }
+
+    .contact-icons img {
+      width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: #2e7d32;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Lightbox */
+    #lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 20px black;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    {% if info['Foto'] %}
+    <img src="/static/uploads/{{ info['Foto'] }}" alt="Profil Fotoğrafı" class="profile-img"
+      onclick="showLightbox(this.src)">
+    {% else %}
+    <img src="https://cdn-icons-png.freepik.com/256/14723/14723219.png?semt=ais_incoming" alt="Varsayılan"
+      class="profile-img">
+    {% endif %}
+
+    <h2>{{ info['Ad Soyad'] }}</h2>
+
+    <p><span class="label">Plaka:</span> {{ plaka }}</p>
+
+    <p>
+      <span class="label">Telefon:</span> {{ info['Telefon'] }}
+      <span class="contact-icons">
+        <a href="tel:+90{{ info['Telefon'] }}" title="Ara"><img
+            src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Ara"></a>
+        <a href="https://wa.me/+90{{ info['Telefon'] | replace(' ', '') | replace('-', '') }}?text=Merhaba%20{{ plaka }}%20plakal%C4%B1%20arac%C4%B1n%C4%B1z%20i%C3%A7in%20size%20ula%C5%9F%C4%B1yorum"
+          target="_blank" title="WhatsApp"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+            alt="WhatsApp"></a>
+      </span>
+    </p>
+
+    {% if info['E-Posta'] %}
+    <p><span class="label">E-Posta:</span> {{ info['E-Posta'] }}</p>
+    {% endif %}
+
+    {% if info['instagram'] %}
+    <p><span class="label">Instagram:</span> <a href="https://instagram.com/{{ info['instagram'] }}" target="_blank">@{{
+        info['instagram'] }}</a></p>
+    {% endif %}
+
+    {% if info['twitter'] %}
+    <p><span class="label">Twitter:</span> <a href="https://twitter.com/{{ info['twitter'] }}" target="_blank">@{{
+        info['twitter'] }}</a></p>
+    {% endif %}
+
+    {% if info['youtube'] %}
+    <p><span class="label">YouTube:</span> <a href="https://youtube.com/{{ info['youtube'] }}" target="_blank">@{{
+        info['youtube'] }}</a></p>
+    {% endif %}
+  </div>
+
+  <!-- Lightbox yapısı -->
+  <div id="lightbox" onclick="this.style.display='none'">
+    <img id="lightbox-img" src="">
+  </div>
+
+  <script>
+    function showLightbox(src) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.src = src;
+      lightbox.style.display = 'flex';
+    }
+  </script>
+</body>
+
+</html>

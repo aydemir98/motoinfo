@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Kart Oluştur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #dce35b, #45b649);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .card h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .image-upload {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1rem auto;
+    }
+
+    .image-upload img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #2e7d32;
+      cursor: pointer;
+    }
+
+    .image-upload input[type="file"] {
+      display: none;
+    }
+
+    .edit-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: #ffffff;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .edit-icon img {
+      width: 20px;
+      height: 20px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .sosyal-toggle {
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 8px;
+      width: 100%;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .sosyal-toggle:hover {
+      background-color: #1b5e20;
+    }
+
+    .sosyal-wrapper {
+      display: none;
+      margin-bottom: 1rem;
+    }
+
+    .sosyal-wrapper label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .sosyal-wrapper img {
+      width: 20px;
+      height: 20px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1b5e20;
+    }
+
+    .hint {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: -0.75rem;
+      margin-bottom: 0.75rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <form action="/" method="POST" enctype="multipart/form-data">
+      <h2>QR Kart Oluştur</h2>
+      {% if error %}
+      <div style="color: red; margin-bottom: 1rem;">{{ error | safe }}</div>
+      {% endif %}
+
+
+      <div class="image-upload">
+        <img src="https://cdn-icons-png.freepik.com/256/14723/14723219.png?semt=ais_incoming" alt="Profil" id="preview"
+          onclick="document.getElementById('foto').click();">
+        <div class="edit-icon" onclick="document.getElementById('foto').click();">
+          <img src="https://cdn-icons-png.freepik.com/256/14723/14723219.png?semt=ais_incoming" alt="Düzenle">
+        </div>
+        <input type="file" id="foto" name="foto" accept="image/*" onchange="previewImage(event)">
+      </div>
+
+      <label for="plaka">Plaka <span class="hint">(örn: 09ABC123)</span></label>
+      <input type="text" id="plaka" name="plaka" required style="text-transform: uppercase;"
+        pattern="\d{2}[A-Za-z]{1,3}\d{2,4}" title="Geçerli bir plaka girin (örn: 09ABC123)" maxlength="9">
+
+      <label for="adsoyad">Ad Soyad</label>
+      <input type="text" id="adsoyad" name="adsoyad" required style="text-transform: capitalize;">
+
+      <label for="telefon">Telefon Numarası <span class="hint">(başında sıfır olmadan)</span></label>
+      <input type="tel" id="telefon" name="telefon" required pattern="5\d{9}" inputmode="numeric" maxlength="10"
+        placeholder="5xxxxxxxxx" title="Telefon numarası 5 ile başlamalı ve 10 haneli olmalı"
+        onkeypress="return /[0-9]/.test(event.key)">
+
+      <label for="email">E-Posta (isteğe bağlı)</label>
+      <input type="email" id="email" name="email">
+
+      <button type="button" class="sosyal-toggle" onclick="toggleSosyal()">+ Sosyal Medya Bilgisi Ekle</button>
+
+      <div class="sosyal-wrapper" id="sosyal-section">
+        <label><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> <input type="text"
+            name="instagram" placeholder="Instagram kullanıcı adı"></label>
+        <label><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter"> <input type="text"
+            name="twitter" placeholder="Twitter kullanıcı adı"></label>
+        <label><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"> <input type="text"
+            name="youtube" placeholder="YouTube kanal adı"></label>
+      </div>
+
+      <button type="submit">QR Kod Oluştur</button>
+    </form>
+  </div>
+
+  <script>
+    function previewImage(event) {
+      const output = document.getElementById('preview');
+      output.src = URL.createObjectURL(event.target.files[0]);
+      output.onload = () => URL.revokeObjectURL(output.src);
+    }
+    function toggleSosyal() {
+      const section = document.getElementById('sosyal-section');
+      section.style.display = section.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+
+</html>
